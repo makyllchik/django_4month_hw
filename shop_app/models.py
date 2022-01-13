@@ -1,9 +1,6 @@
 from django.db import models
 
 
-# Create your models here.
-
-
 class Category(models.Model):
     name = models.CharField(max_length=100)
 
@@ -13,6 +10,7 @@ class Category(models.Model):
 
 class Tag(models.Model):
     name = models.CharField(max_length=100)
+    is_active = models.BooleanField(default=True)
 
     def __str__(self):
         return self.name
@@ -23,15 +21,26 @@ class Product(models.Model):
     description = models.TextField(max_length=150)
     price = models.IntegerField()
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
-    tags = models.ManyToManyField(Tag)
+    tags = models.ManyToManyField(Tag, blank=True)
 
     def __str__(self):
         return self.title
 
 
+STARS = (
+    (1, '*'),
+    (2, '**'),
+    (3, '***'),
+    (4, '****'),
+    (5, '*****'),
+)
+
+
 class Review(models.Model):
-    text = models.TextField(max_length=150)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    text = models.CharField(max_length=100)
+    value = models.IntegerField(choices=STARS)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE,
+                                related_name='reviews')
 
     def __str__(self):
         return self.text
