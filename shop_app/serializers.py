@@ -14,7 +14,7 @@ class CategorySerializer(serializers.ModelSerializer):
 class TagSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tag
-        fields = ['name','is_active']
+        fields = ['name', 'is_active']
 
 
 class ReviewSerializer(serializers.ModelSerializer):
@@ -52,5 +52,11 @@ class ProductTagSerializer(serializers.ModelSerializer):
         model = Product
         fields = "__all__"
 
-    def get_tags(self,product):
-        return TagSerializer(product.tags.filter(is_active = True), many=True).data
+    def get_tags(self, product):
+        return TagSerializer(product.tags.filter(is_active=True), many=True).data
+
+
+class ProductDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Product
+        fields = ['id', 'title', 'tags', 'price', 'category', 'description']
